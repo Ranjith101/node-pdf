@@ -20,7 +20,13 @@ app.post("/generate-pdf", async (req, res) => {
   const page = await browser.newPage();
 
   // Navigate to the URL and wait for 4 minutes (240,000 milliseconds)
-  await page.goto(url, { waitUntil: "load" });
+  try {
+    await page.goto(url, { waitUntil: "load", timeout: 0 });
+  } catch (error) {
+    console.error("Navigation error:", error);
+    // Handle the error here, such as logging it or sending a response to the client.
+  }
+  
   // await page.waitForTimeout(4 * 60 * 1000); // 5 minutes
   // Set the viewport height to a very large value
   await page.setViewport({ width: 1200, height: 12000 });
